@@ -12,8 +12,8 @@ post "/hotline" do
     )
 
     response.gather(
-      input: "speech"
-      action: "https://guarded-atoll-40934-2505c0c0e70b.herokuapp.com/handle_speech"
+      input: "speech",
+      action: "https://guarded-atoll-40934-2505c0c0e70b.herokuapp.com/handle_speech",
       method: "POST"
     )
   end.to_s
