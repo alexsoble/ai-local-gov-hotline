@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'twilio-ruby'
 
 post '/hotline' do
   content_type 'text/xml'
