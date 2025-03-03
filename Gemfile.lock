@@ -4,15 +4,21 @@ GEM
     base64 (0.2.0)
     benchmark (0.4.0)
     daemons (1.4.1)
+    dotenv (2.8.1)
     eventmachine (1.2.7)
     faraday (2.8.1)
       base64
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-net_http (3.0.2)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
+      multi_xml (>= 0.5.2)
     jwt (2.10.1)
       base64
+    mini_mime (1.1.5)
     mini_portile2 (2.8.8)
+    multi_xml (0.6.0)
     mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     nokogiri (1.13.10)
@@ -46,6 +52,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
+  httparty
   sinatra
   thin
   twilio-ruby

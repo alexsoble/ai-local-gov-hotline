@@ -1,24 +1,28 @@
-require "sinatra"
-require "twilio-ruby"
+require 'sinatra'
+require 'dotenv/load'
+require './claude_wrapper.rb'
+require './twilio_wrapper.rb'
 
-post "/hotline" do
-  content_type "text/xml"
-
-  WELCOME_MESSAGE = "Hello and welcome to the Water Department hotline. How may we assist you today?"
-
-  Twilio::TwiML::VoiceResponse.new do | response |
-    response.say(
-      message: WELCOME_MESSAGE
-    )
-
-    response.gather(
-      input: "speech",
-      action: "https://guarded-atoll-40934-2505c0c0e70b.herokuapp.com/handle_speech",
-      method: "POST"
-    )
-  end.to_s
+get '/' do 
+  return 'Hello, world!'  
 end
 
-post "/handle_speech" do   
-  puts(params)
+post '/hotline' do
+  content_type 'text/xml'
+
+  WELCOME_MESSAGE = 'Hello and welcome to the Water Department hotline. How may we assist you today?'
+
+  TwilioWrapper.new.say_and_gather(
+    message: WELCOME_MESSAGE,
+    action: '/handle_speech'
+  )
+end
+
+post '/handle_speech' do   
+  response = ClaudeWrapper.new(params['SpeechResult']).claude_response
+
+  TwilioWrapper.new.say_and_gather(
+    message: response,
+    action: '/handle_speech'
+  )
 end
