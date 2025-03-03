@@ -1,12 +1,12 @@
 require 'sinatra'
-require 'dotenv/load'
 require 'fileutils'
 require './claude_wrapper.rb'
 require './twilio_wrapper.rb'
 require 'logger'
 
-configure do
-  set :logging, Logger::DEBUG
+configure :development do
+    require 'dotenv/load'
+    set :logging, Logger::DEBUG
 end
 
 get '/' do 
