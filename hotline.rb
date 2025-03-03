@@ -37,12 +37,12 @@ end
 
 post '/handle_speech' do   
     call_sid = params['CallSid']
-    REDIS.set("call:#{call_sid}:status", "processing")
+    $redis.set("call:#{call_sid}:status", "processing")
 
     Thread.new do
         response = ClaudeWrapper.new(params['SpeechResult']).claude_response
-        REDIS.set("call:#{call_sid}:status", "completed")
-        REDIS.set("call:#{call_sid}:response", "response")
+        $redis.set("call:#{call_sid}:status", "completed")
+        $redis.set("call:#{call_sid}:response", "response")
     end
 
     TwilioWrapper.new.say_and_redirect(
@@ -53,8 +53,8 @@ end
 
 post '/check-claude-response' do
     call_sid = params['call_sid']
-    status = REDIS.get("call:#{call_sid}:status")
-    response = REDIS.get("call:#{call_sid}:response")
+    status = $redis.get("call:#{call_sid}:status")
+    response = $redis.get("call:#{call_sid}:response")
 
     if status == 'completed'
         TwilioWrapper.new.say_and_gather(
