@@ -6,6 +6,12 @@ Call 331-244-7720.
 
 ## Local
 
+You'll need the following installed locally:
+
+1. `ruby`
+2. `bundler`
+3. `redis`: key-value datastore
+
 Install dependencies:
 
 ```
@@ -22,18 +28,46 @@ This will start redis locally and spin up a local server at localhost:4567.
 
 ## Cloud
 
-## Deploy
+You'll need accounts for these services:
+
+1. Twilio: telephony provider
+2. Heroku: app cloud hosting
+
+Provision your Heroku instance with a Redis server.
+
+### Deploy
 
 ```
 make deploy
 ```
 
-Deploys to Heroku.
-
 # High-level architecture
 
-Brief explanation or external document of how the system is structured, the core design decisions, and how data flows.
+```mermaid
+flowchart TD
+    User([User]) <--> |"Voice"| Twilio[Twilio Service]
+
+    subgraph "Application Server"
+        AppLogic[API & Business Logic]
+    end
+
+    Twilio <--> |"Webhooks/API"| AppLogic
+
+    AppLogic <--> |"API Requests"| Claude[Claude AI API]
+
+    AppLogic <--> |"Store/Retrieve"| Redis[(Redis Keystore)]
+
+    classDef external fill:#f96,stroke:#333,stroke-width:2px
+    classDef storage fill:#69b,stroke:#333,stroke-width:2px
+    classDef app fill:#9d9,stroke:#333,stroke-width:2px
+
+    class User,Twilio,Claude external
+    class Redis storage
+    class AppLogic app
+```
 
 # Tech stack choices
 
-Why you chose particular frameworks, libraries, or services (e.g., Twilio, certain AI models, etc.).
+* Twilio: Excellent APIs, strong documentation.
+* Claude: Low hallucination, strong reasoning, long context window.
+	* Chose to pass in Raleigh Water Department FAQ data within the prompt context window not as RAG. This guarnatees data visibility, and has lower latency.
