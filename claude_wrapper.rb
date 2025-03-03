@@ -26,7 +26,8 @@ class ClaudeWrapper
 
 		Here is the customer's question: '#{@speech_input}'
 
-		What is your answer?"
+		What is your answer? Please respond in a short, conversational way as if you
+		were an efficient, concise customer service agent."
 	end
 
 	def query_claude
