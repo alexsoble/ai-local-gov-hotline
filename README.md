@@ -70,4 +70,4 @@ flowchart TD
 
 * Twilio: Excellent APIs, strong documentation.
 * Claude: Low hallucination, strong reasoning, long context window.
-	* Chose to pass in Raleigh Water Department FAQ data within the prompt context window not as RAG. This guarnatees data visibility, and has lower latency.
+* I chose to pass in Raleigh Water Department FAQ data within the prompt context window, not as RAG. This guarnatees data visibility and has lower latency.
