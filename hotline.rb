@@ -43,7 +43,7 @@ post '/handle_speech' do
     Thread.new do
         response = ClaudeWrapper.new(params['SpeechResult']).claude_response
         $redis.set("call:#{call_sid}:status", "completed")
-        $redis.set("call:#{call_sid}:response", "response")
+        $redis.set("call:#{call_sid}:response", response)
     end
 
     TwilioWrapper.new.say_and_redirect(
