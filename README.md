@@ -1,3 +1,7 @@
+# Try it out!
+
+Call 331-244-7720.
+
 # Setup
 
 ## Local
@@ -11,18 +15,20 @@ make install
 Run the app locally:
 
 ```
-# Starts redis locally, spins up a local server at localhost:4567
 make local
 ```
+
+This will start redis locally and spin up a local server at localhost:4567.
 
 ## Cloud
 
 ## Deploy
 
 ```
-# Deploys to heroku
 make deploy
 ```
+
+Deploys to Heroku.
 
 # High-level architecture
 
