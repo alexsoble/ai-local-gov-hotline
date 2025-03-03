@@ -3,6 +3,7 @@ require 'fileutils'
 require './claude_wrapper.rb'
 require './twilio_wrapper.rb'
 require 'logger'
+require 'redis'
 
 configure :development do
     # Load up local env from .env
