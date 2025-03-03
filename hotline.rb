@@ -21,22 +21,16 @@ configure :production do
     $redis = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 end
 
-get '/' do 
-    return 'Hello, world!'
-end
-
 post '/hotline' do
-    content_type 'text/xml'
-
-    WELCOME_MESSAGE = 'Hello and welcome to the Water Department hotline. How may we assist you today?'
+    WELCOME_MESSAGE = 'Hello and welcome to the Water Department hotline. You can ask me questions about anything: water service, billing, or sewer issues. How can I assist you today?'
 
     TwilioWrapper.new.say_and_gather(
         message: WELCOME_MESSAGE,
-        action: '/handle_speech'
+        action: '/handle-speech'
     )
 end
 
-post '/handle_speech' do   
+post '/handle-speech' do
     call_sid = params['CallSid']
     $redis.set("call:#{call_sid}:status", "processing")
 
@@ -47,7 +41,7 @@ post '/handle_speech' do
     end
 
     TwilioWrapper.new.say_and_redirect(
-        message: 'One moment while I look up that information for you.',
+        message: 'One moment.',
         url: '/check-claude-response?call_sid=' + call_sid
     )
 end
