@@ -5,8 +5,19 @@ require './twilio_wrapper.rb'
 require 'logger'
 
 configure :development do
+    # Load up local env from .env
     require 'dotenv/load'
+
+    # Let's be verbose locally
     set :logging, Logger::DEBUG
+
+    # Local redis
+    $redis = Redis.new
+end
+
+configure :production do
+    # Connect to Heroku Redis
+    $redis = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 end
 
 get '/' do 
@@ -26,53 +37,34 @@ end
 
 post '/handle_speech' do   
     call_sid = params['CallSid']
-    status_file = "tmp/background/#{call_sid}.json"
-
-    File.write(status_file, JSON.generate({
-        status: "processing",
-        timestamp: Time.now.to_i
-    }))
+    REDIS.set("call:#{call_sid}:status", "processing")
 
     Thread.new do
         response = ClaudeWrapper.new(params['SpeechResult']).claude_response
-
-        File.write(status_file, JSON.generate({
-          status: "completed",
-          timestamp: Time.now.to_i,
-          response: response,
-        }))
+        REDIS.set("call:#{call_sid}:status", "completed")
+        REDIS.set("call:#{call_sid}:response", "response")
     end
 
     TwilioWrapper.new.say_and_redirect(
         message: 'One moment while I look up that information for you.',
-        url: '/check-status-filesystem?call_sid=' + call_sid
+        url: '/check-claude-response?call_sid=' + call_sid
     )
 end
 
-post '/check-status-filesystem' do
+post '/check-claude-response' do
     call_sid = params['call_sid']
-    status_file = "tmp/background/#{call_sid}.json"
+    status = REDIS.get("call:#{call_sid}:status")
+    response = REDIS.get("call:#{call_sid}:response")
 
-    if File.exist?(status_file)
-        data = JSON.parse(File.read(status_file))
-        response = data['response']
-
-        if data['status'] == 'completed'
-            TwilioWrapper.new.say_and_gather(
-                message: response,
-                action: '/handle_speech'
-            )
-        else
-            TwilioWrapper.new.pause_and_redirect(
-                seconds: 2,
-                url: '/check-status-filesystem?call_sid=' + call_sid
-            )
-        end
-    else
-        # Handle error case - status file missing
+    if status == 'completed'
         TwilioWrapper.new.say_and_gather(
-            message: "Sorry, we couldn't handle your query. Please try again.",
+            message: response,
             action: '/handle_speech'
+        )
+    else
+        TwilioWrapper.new.pause_and_redirect(
+            seconds: 2,
+            url: '/check-claude-response?call_sid=' + call_sid
         )
     end
 end
