@@ -1,7 +1,7 @@
 require 'twilio-ruby'
 
 class TwilioWrapper
-	def say_and_gather(message: message, action: action)
+	def say_and_gather(message:, action:)
 	  Twilio::TwiML::VoiceResponse.new do |response|
 	    response.say(message: message)
 
@@ -13,7 +13,7 @@ class TwilioWrapper
 	  end.to_s
 	end
 
-	def say_and_redirect(message: message, url: url)
+	def say_and_redirect(message:, url:)
 		Twilio::TwiML::VoiceResponse.new do |response|
 		    response.say(message: message)
 		    response.redirect(url)
@@ -26,13 +26,13 @@ class TwilioWrapper
 		end.to_s
 	end
 
-	def say(message: message)
+	def say(message:)
 	  Twilio::TwiML::VoiceResponse.new do |response|
 	    response.say(message: message)
 	  end.to_s
 	end 
 
-	def pause_and_redirect(seconds: seconds, url: url)
+	def pause_and_redirect(seconds:, url:)
 		Twilio::TwiML::VoiceResponse.new do |response|
 			response.pause(length: seconds)
 			response.redirect(url)
