@@ -1,0 +1,47 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    base64 (0.2.0)
+    benchmark (0.4.0)
+    faraday (2.8.1)
+      base64
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
+    jwt (2.10.1)
+      base64
+    mini_portile2 (2.8.8)
+    mustermann (3.0.3)
+      ruby2_keywords (~> 0.0.1)
+    nokogiri (1.13.10)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    ostruct (0.6.1)
+    racc (1.8.1)
+    rack (2.2.11)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
+    ruby2_keywords (0.0.5)
+    sinatra (3.2.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.2.0)
+      tilt (~> 2.0)
+    tilt (2.6.0)
+    twilio-ruby (7.4.5)
+      benchmark
+      faraday (>= 0.9, < 3.0)
+      jwt (>= 1.5, < 3.0)
+      nokogiri (>= 1.6, < 2.0)
+      ostruct
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  sinatra
+  twilio-ruby
+
+BUNDLED WITH
+   1.17.2
