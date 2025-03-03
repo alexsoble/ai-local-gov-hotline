@@ -41,7 +41,7 @@ post '/handle-speech' do
     end
 
     TwilioWrapper.new.say_and_redirect(
-        message: 'One moment.',
+        message: 'One moment please.',
         url: '/check-claude-response?call_sid=' + call_sid
     )
 end
@@ -54,7 +54,7 @@ post '/check-claude-response' do
     if status == 'completed'
         TwilioWrapper.new.say_and_gather(
             message: response,
-            action: '/handle_speech'
+            action: '/handle-speech'
         )
     else
         TwilioWrapper.new.pause_and_redirect(
