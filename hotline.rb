@@ -34,16 +34,28 @@ post '/handle-speech' do
     call_sid = params['CallSid']
     $redis.set("call:#{call_sid}:status", "processing")
 
-    Thread.new do
-        response = ClaudeWrapper.new(params['SpeechResult']).claude_response
-        $redis.set("call:#{call_sid}:status", "completed")
-        $redis.set("call:#{call_sid}:response", response)
-    end
-
-    TwilioWrapper.new.say_and_redirect(
-        message: 'One moment please.',
-        url: '/check-claude-response?call_sid=' + call_sid
+    # Do some extra logging for demo purposes:
+    puts(
+        "Handling speech...",
+        params.inspect,
+        "params['SpeechResult']",
+        params['SpeechResult']
     )
+
+    if params['SpeechResult']
+        Thread.new do
+            response = ClaudeWrapper.new(params['SpeechResult']).claude_response
+            $redis.set("call:#{call_sid}:status", "completed")
+            $redis.set("call:#{call_sid}:response", response)
+        end
+
+        TwilioWrapper.new.say_and_redirect(
+            message: 'One moment please.',
+            url: '/check-claude-response?call_sid=' + call_sid
+        )
+    else
+        TwilioWrapper.new.say(message: 'Thank you for your call, have a great day.')
+    end
 end
 
 post '/check-claude-response' do
