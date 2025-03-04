@@ -1,7 +1,7 @@
 require 'sinatra'
 require 'fileutils'
-require './claude_wrapper.rb'
-require './twilio_wrapper.rb'
+require './apis/claude_wrapper.rb'
+require './apis/twilio_wrapper.rb'
 require 'logger'
 require 'redis'
 
