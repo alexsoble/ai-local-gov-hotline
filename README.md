@@ -71,3 +71,12 @@ flowchart TD
 * Twilio: Excellent APIs, strong documentation.
 * Claude: Low hallucination, strong reasoning, long context window.
 * I chose to pass in Raleigh Water Department FAQ data within the prompt context window, not as RAG. This guarnatees data visibility and has lower latency.
+
+# Thoughts on productionizing
+
+## Scaling, security, privacy
+
++ Upgrade to a relational db instead of just a key-value store
++ Beef up event logging and audit trails
++ Tenant isolation for multiple city gov customers
++ Look to FISMA NIST controls for a security compliance framework
