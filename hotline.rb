@@ -21,9 +21,9 @@ configure :production do
     $redis = Redis.new(url: ENV['REDIS_URL'], ssl_params: { verify_mode: OpenSSL::SSL::VERIFY_NONE })
 end
 
-post '/hotline' do
-    WELCOME_MESSAGE = 'Hello and welcome to the Water Department hotline. You can ask me questions about anything: water service, billing, or sewer issues. How can I assist you today?'
+WELCOME_MESSAGE = 'Hello and welcome to the Water Department hotline. You can ask me questions about anything: water service, billing, or sewer issues. How can I assist you today?'
 
+post '/hotline' do
     TwilioWrapper.new.say_and_gather(
         message: WELCOME_MESSAGE,
         action: '/handle-speech'
