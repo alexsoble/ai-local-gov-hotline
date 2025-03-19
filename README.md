@@ -1,7 +1,3 @@
-# Try it out!
-
-Call 331-244-7720.
-
 # Setup
 
 ## Local
